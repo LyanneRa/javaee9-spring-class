@@ -10,4 +10,13 @@ class Javaee9SpringApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void dependencyInjectionFirstTrial() {
+        Toy plasticGun = new Toy("plastic gun");
+        Child john = new Child("John", plasticGun);
+        Parent jason = new Parent("Jason", john);
+    }
 }
+record Toy(String name){}
+record Child(String name, Toy favouriteToy) {}
+record Parent(String name, Child child) {}
