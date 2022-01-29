@@ -52,10 +52,26 @@ public class FirstController {
                 .addAttribute("mySurname", mySurname);
         return "pages/name-and-surname";
     }
-
     @PostMapping("/my-first-post")
     public String myFirstOtherThanGetHttpMethod() {
         log.info("myFirstOtherThanGetHttpMethod() was called");
         return "pages/post-page";
+    }
+    @GetMapping("/converter")
+    public String converter(@RequestParam(value= "name", defaultValue = "Martin")String name,
+                            @RequestParam(value = "height", defaultValue = "180") double heightInCm,
+                            @RequestParam(value = "weight", defaultValue = "90") double weightInKg,
+                            Model parameters){
+        double heightInInch = heightInCm * 0.4;
+        double weightInPound = weightInKg * 2.2;
+        log.info("converter() method called");
+        log.info("name: [{}], height in cm: [{}], weight in kg: [{}]", name, heightInCm, weightInKg);
+        log.info("name: [{}], height in inches: [{}], weight in pounds: [{}]", name, heightInInch, weightInPound);
+        parameters.addAttribute("name", name)
+                .addAttribute("height", heightInCm)
+                .addAttribute("weight", weightInKg)
+                .addAttribute("heightInInch", heightInInch)
+                .addAttribute("weightInPound", weightInPound);
+        return "pages/converted-values";
     }
 }
