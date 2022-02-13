@@ -1,24 +1,27 @@
 package com.sda.javaee9spring.homework.car;
 
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@Service
-public class Car {
-    private final Wheel firstWheel;
-    private final Wheel secondWheel;
-    private final Wheel thirdWheel;
-    private final Wheel fourthWheel;
-    private final CarBody carBody;
-    private final Engine engine;
-    private final EngineBody engineBody;
-
-    public Car(Wheel firstWheel, Wheel secondWheel, Wheel thirdWheel, Wheel fourthWheel, CarBody carBody, Engine engine, EngineBody engineBody) {
+@Component
+@Slf4j
+public record Car(Wheel firstWheel,
+                  Wheel secondWheel,
+                  Wheel thirdWheel,
+                  Wheel fourthWheel,
+                  CarBody carBody,
+                  Engine engine) {
+   /* public Car(Wheel firstWheel, Wheel secondWheel, Wheel thirdWheel, Wheel fourthWheel, CarBody carBody, Engine engine) {
         this.firstWheel = firstWheel;
         this.secondWheel = secondWheel;
         this.thirdWheel = thirdWheel;
         this.fourthWheel = fourthWheel;
         this.carBody = carBody;
         this.engine = engine;
-        this.engineBody = engineBody;
+
+        log.info("Car was created"); }*/
+
+    public Car {
+        log.info("Car was created");
     }
 }
