@@ -18,7 +18,8 @@ public class RealPersonService {
     public RealPersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
-    public List<PersonEntity> readAllPersonEntities(){
+
+    public List<PersonEntity> readAllPersonEntities() {
         log.info("trying to read all person entities");
 
         var result = personRepository.findAll();
@@ -26,6 +27,7 @@ public class RealPersonService {
 
         return result;
     }
+
     public Optional<PersonEntity> readPersonEntityById(Long id) {
         log.info("trying to read entity by id: [{}]", id);
 
@@ -34,6 +36,7 @@ public class RealPersonService {
         log.info("found Person entity: [{}]", maybePerson);
         return maybePerson;
     }
+
     @Transactional
     public boolean deletePersonEntityById(Long id) {
         log.info("trying to delete entity by id: [{}]", id);
@@ -44,15 +47,33 @@ public class RealPersonService {
         }
         return result;
     }
+
     @Transactional
-    public PersonEntity savePerson(PersonEntity entity){
+    public boolean savePerson(PersonEntity entity) {
+        boolean result = false;
         log.info("entity for saving: [{}]", entity);
-        if (!personRepository.checkDuplicates(entity.getName(), entity.getSurname())) {
+        if (checkIfEntityIsValid(entity) && !personRepository.checkDuplicates(entity.getName(), entity.getSurname())) {
             personRepository.save(entity);
             log.info("entity after saving: [{}]", entity);
+            result = true;
         } else {
-            log.info("duplicate!");
+            log.info("not valid object");
         }
-        return entity;
+        return result;
+    }
+    private static boolean checkIfEntityIsValid(PersonEntity entity) {
+        boolean result = true;
+        // " John " -> "John"
+        // " "
+        if (entity.getName() == null || entity.getName().isBlank()) {
+            result = false;
+        } else if (entity.getSurname() == null || entity.getSurname().isBlank()) {
+            result = false;
+        } else if (entity.getAge() < 0) {
+            result = false;
+        }
+        log.info("entity: [{}], valid:[{}]", entity, result);
+
+        return result;
     }
 }
